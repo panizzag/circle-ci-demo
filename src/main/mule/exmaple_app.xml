@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	
+	<sap:inbound-config name="SAP_Inbound" doc:name="SAP Inbound" doc:id="3ec28f01-7817-4fba-9174-4e38709c06b2" >
+		<sap:simple-connection-provider-connection applicationServerHost="vhcrnsd1ci.hec.corning.com" username="MUL_HANA" password="5SLg7ENJ?" systemNumber="00" client="310" language="EN" >
+			<sap:extended-properties >
+				<sap:extended-property key="evaluateResponseFlag" value="false" />
+			</sap:extended-properties>
+		</sap:simple-connection-provider-connection>
+	</sap:inbound-config>
+	
+	<flow name="test" doc:id="39261245-fe5a-4b25-9659-cce50378ea7e" initialState="started">
+        <sap:function-source operationTimeout="10000" doc:name="Function source" doc:id="7d99622e-d112-4f01-8a5f-f35f129476e2" config-ref="SAP_Inbound" gatewayHost="vhcrnsd1ci.hec.corning.com" programID="MULESOFT_310" gatewayService="3300"/>
+        <logger level="INFO" doc:name="Logger " doc:id="b2f0efe2-ab90-4400-92a1-aefac824c5c0" message="X10 #[payload]"/>
+		<choice doc:name="Choice" doc:id="129f4f75-f6f9-44e8-b238-faf9da7d19ae" >
+			<when expression="#[(p('mule.env') default &quot;&quot;)!=&quot;local&quot;]">
+				<logger level="INFO" doc:name="Logger" doc:id="4c04638e-6418-4e74-a7bf-f8b183bbf48b" />
+			</when>
+		</choice>
+    </flow>
+	<flow name="exmaple_appFlow" doc:id="57d220b7-b5a6-4b3d-997d-5e96c4ca1571" >
+		<file:read doc:name="Read" doc:id="2c9191e5-24a7-407a-acb6-e691ecd5472d" />
+	</flow>	
+	
+</mule>
